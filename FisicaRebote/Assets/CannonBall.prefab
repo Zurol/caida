@@ -112,6 +112,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_delayFrame: 3
+  m_print: {fileID: 8056991449404858625, guid: 0641aed97a763b846af953f120d03232, type: 3}
   m_energyLoss: 0.9
   m_bounces: 0
 --- !u!54 &1083100967

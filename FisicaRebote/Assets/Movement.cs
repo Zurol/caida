@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Movement : MonoBehaviour
 {
@@ -23,6 +24,9 @@ public class Movement : MonoBehaviour
 
     bool is_falling;
 
+    public GameObject m_print;
+    GameObject m_spawned;
+
     public float m_energyLoss;
     public int m_bounces;
 
@@ -40,6 +44,11 @@ public class Movement : MonoBehaviour
         m_initialHeight = m_initialPosition - m_finalHeight;
         m_finalSpeed = Mathf.Sqrt( 2 * m_gravity * m_deltaX );
         Debug.Log("FS: " + m_finalSpeed);
+        m_spawned = Instantiate(m_print, transform.position, Quaternion.identity);
+
+        if (m_spawned.GetComponentInChildren<TextMeshProUGUI>()) {
+            m_spawned.GetComponentInChildren<TextMeshProUGUI>().text = "H: " + transform.position.y.ToString("#.00") + "  || V=" + m_finalSpeed.ToString("#.00") + " m/s";
+        }
 
     }
 
@@ -69,7 +78,13 @@ public class Movement : MonoBehaviour
 
             if (transform.position.y >= m_finalHeight) {
                 is_falling = true;
+                m_spawned = Instantiate(m_print, transform.position, Quaternion.identity);
                 m_finalHeight = ((m_finalSpeed * m_energyLoss) * (m_finalSpeed * m_energyLoss)) / (2 * m_gravity);
+
+                if (m_spawned.GetComponentInChildren<TextMeshProUGUI>())
+                {
+                    m_spawned.GetComponentInChildren<TextMeshProUGUI>().text = "H: " + transform.position.y.ToString("#.00") + "  || V=" + m_finalSpeed.ToString("#.00") + " m/s";
+                }
             }
         }
   
