@@ -21,11 +21,17 @@ public class Movement : MonoBehaviour
     float m_initialHeight;
     float m_finalHeight;
 
+    bool is_falling;
+
+    public float m_energyLoss;
+    public int m_bounces;
+
     // Start is called before the first frame update
     void Start()
     {
         m_initialSpeed = 0;
         m_finalHeight = 0;
+        is_falling = true;
         m_initialPosition = transform.position.y;
         m_deltaX = Mathf.Abs( (0 - transform.position.y));
 
@@ -41,16 +47,30 @@ public class Movement : MonoBehaviour
     private void FixedUpdate()
     {
         // if falling
-        Debug.Log("SP:" + m_finalSpeed + " |||| H: " + m_initialHeight);
-        if (m_finalSpeed > 0 && m_initialHeight > 0) {
+        
+        if (m_finalSpeed > 0 && transform.position.y > 0 && is_falling) {
             Debug.Log("Falling");
 
             transform.position += new Vector3(0, -1, 0) * m_finalSpeed * Time.fixedDeltaTime;
-        } else if (m_finalSpeed < 0)
-        {
-            Debug.Log("going Up");
 
-            //transform.position += new Vector3(0, 1, 0) * m_finalSpeed * Time.fixedDeltaTime;
+            if (transform.position.y <= 0)
+            {
+                transform.position = new Vector3(transform.position.x, 0, 0);
+                is_falling = false;
+                m_finalHeight = ( (m_finalSpeed * m_energyLoss) * (m_finalSpeed * m_energyLoss)) / ( 2 * m_gravity);
+                m_finalSpeed = Mathf.Sqrt( 2 * m_gravity * m_finalHeight );
+            }
+        } else if (m_finalSpeed > 0 && transform.position.y < m_finalHeight && !is_falling)
+        {
+            Debug.Log("SP:" + m_finalSpeed + " |||| H: " + m_initialHeight);
+            //transform.position = new Vector3(transform.position.x, 0, 0);
+
+            transform.position += new Vector3(0, 1, 0) * m_finalSpeed * Time.fixedDeltaTime;
+
+            if (transform.position.y >= m_finalHeight) {
+                is_falling = true;
+                m_finalHeight = ((m_finalSpeed * m_energyLoss) * (m_finalSpeed * m_energyLoss)) / (2 * m_gravity);
+            }
         }
   
 
@@ -78,7 +98,7 @@ public class Movement : MonoBehaviour
 	public void OnTriggerEnter(Collider other)
     {
         Debug.Log("Trigger Enter");
-
+        
         //m_initialSpeed = m_finalSpeed;
         //m_finalSpeed = - ( m_initialSpeed * m_initialSpeed) / 2 * m_gravity;
     }

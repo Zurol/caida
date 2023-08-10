@@ -112,6 +112,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_delayFrame: 3
+  m_energyLoss: 0.9
+  m_bounces: 0
 --- !u!54 &1083100967
 Rigidbody:
   m_ObjectHideFlags: 0
